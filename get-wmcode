@@ -1,0 +1,84 @@
+#!/bin/bash
+
+# script get tools and window manager code 
+# run in the base of your code tree
+
+# this script is provided with NO GUARANTEE and NO SUPPORT 
+# if it breaks or does not do what you want, FIX IT YOURSELF
+
+grn="\e[32m"
+rst="\e[0m"    # reset
+
+alist=(tools cwm sithwm alopex monsterwm musca snapwm euclid-wm echinus wmfs karmen )
+
+let num=${#alist[*]}-1     # number of items in the array (minus one to account for zero index)
+tmpfile=`mktemp`            # make a temp file for dialog return value
+
+# make a list in menu format, with a number first, then the name
+for i in `seq 0 $num`; do
+    blist[i]=`echo $i ${alist[i]} off`
+done
+
+# display the list in a dialog, save the return value (the index numbers) in the tmpfile
+dialog --no-tags --checklist 'choose a window manager' 50 50 10 ${blist[*]} 2>$tmpfile
+
+function get-wm {
+    for wm in "$@"
+    do
+        case $wm in
+            0 ) 
+                echo -e $grn'\ninstall tools'$rst
+                sudo apt-get install git libx11-dev libxft-dev libxinerama-dev libxrandr-dev libimlib2-dev bison
+                ;;
+            1 )
+                echo -e $grn'\ngit clone cwm'$rst
+                git clone git://github.com/chneukirchen/cwm.git
+                ;;
+            2 )
+                echo -e $grn'\nwget sithwm'$rst
+                wget -c http://sithwm.darkside.no/sn/sithwm-1.2.3.tgz
+                tar xzvf sithwm-1.2.3.tgz
+                ;;
+            3 )
+                echo -e $grn'\ngit clone alopex'$rst
+                git clone git://github.com/TrilbyWhite/alopex.git
+                ;;
+            4 )
+                echo -e $grn'\ngit clone monsterwm'$rst
+                git clone git://github.com/c00kiemon5ter/monsterwm
+                ;;
+            5 )
+                echo -e $grn'\nwget musca'$rst
+                wget -c http://aerosuidae.net/musca-0.9.24.tgz
+                tar xzvf musca-0.9.24.tgz
+                ;;
+            6 )
+                echo -e $grn'\ngit clone snapwm'$rst
+                git clone git://github.com/moetunes/snapwm-stable
+                ;;
+            7 )
+                echo -e $grn'\nwget euclid-wm'$rst
+                wget -c http://euclid-wm.googlecode.com/files/euclid-wm-0.3.1.tar.gz
+                tar xzvf euclid-wm-0.3.1.tar.gz
+                ;;
+            8 )
+                echo -e $grn'\nwget echinus' $rst
+                wget -c http://plhk.ru/static/echinus/echinus-0.4.9.tar.gz
+                tar xzvf echinus-0.4.9.tar.gz
+                ;;
+            9 )
+                echo -e $grn'\ngit clone wmfs'$rst
+                git clone git://github.com/xorg62/wmfs.git
+                ;;
+            10 )
+                echo -e $grn'\nwget karmen'$rst
+                wget -c http://downloads.sourceforge.net/karmen/karmen-0.15.tar.gz
+                tar xzvf karmen-0.15.tar.gz
+                ;;
+        esac
+    done    
+}
+
+get-wm `cat $tmpfile`
+rm $tmpfile
+    
