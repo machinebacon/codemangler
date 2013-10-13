@@ -12,10 +12,10 @@ rst="\e[0m"    # reset
 alist=(tools cwm sithwm alopex monsterwm musca snapwm euclid-wm echinus wmfs karmen )
 
 let num=${#alist[*]}-1     # number of items in the array (minus one to account for zero index)
-tmpfile=`mktemp`            # make a temp file for dialog return value
+tmpfile=$(mktemp)            # make a temp file for dialog return value
 
 # make a list in menu format, with a number first, then the name
-for i in `seq 0 $num`; do
+for i in $(seq 0 $num); do
     blist[i]=`echo $i ${alist[i]} off`
 done
 
@@ -79,6 +79,6 @@ function get-wm {
     done    
 }
 
-get-wm `cat $tmpfile`
+get-wm $(cat $tmpfile)
 rm $tmpfile
     
