@@ -1,0 +1,47 @@
+#!/bin/bash
+# script to copy an iso to usb stick, with some error checking
+
+# this script is provided with NO GUARANTEE and NO SUPPORT 
+# if it breaks or does not do what you want, FIX IT YOURSELF
+
+DEVICE='/dev/sdb' # first choice is /dev/sdb
+BANNED_DEVICES=( sda sdc sdd ) # put your hard drives in this array
+
+usage() {
+    echo 'ddiso: copies an iso file to usb drive at '$DEVICE
+    echo 'usage: ddiso isofile <sdX>'
+    echo 'assumes /dev/sdb if device is not specified'
+    exit 1
+}
+
+if [ -z $1 ]; then # no iso file specified
+    usage
+fi
+
+if [ ! -e $1 ]; then # iso file not found
+    echo 'file "'$1'" does not exist'
+    usage
+fi
+
+if [ ! -z $2 ]; then # alternate device specified
+    for device in ${BANNED_DEVICES[@]}; do
+        if [ $2 = $device ]; then
+            echo "I can't let you copy to "$2
+            echo "If you are sure, edit the BANNED_DEVICES array"
+            exit 1
+        fi
+    done
+    DEVICE='/dev/'$2
+fi
+
+echo 'copy '$1' to usb stick at '$DEVICE
+read -n1 -p 'are you sure? (y/n)'
+echo
+if [ $REPLY = 'y' ]; then
+    cmd='dd bs=4M if='$1' of='$DEVICE
+    echo $cmd
+    $cmd 
+    echo 'done'
+    sync
+    echo 'now safe to remove '$DEVICE
+fi
