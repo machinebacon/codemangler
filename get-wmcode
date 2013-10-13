@@ -1,11 +1,5 @@
 #!/bin/bash
 
-# script get tools and window manager code 
-# run in the base of your code tree
-
-# this script is provided with NO GUARANTEE and NO SUPPORT 
-# if it breaks or does not do what you want, FIX IT YOURSELF
-
 grn="\e[32m"
 rst="\e[0m"    # reset
 
@@ -16,7 +10,7 @@ tmpfile=$(mktemp)            # make a temp file for dialog return value
 
 # make a list in menu format, with a number first, then the name
 for i in $(seq 0 $num); do
-    blist[i]=`echo $i ${alist[i]} off`
+    blist[i]=$(echo $i ${alist[i]} off)
 done
 
 # display the list in a dialog, save the return value (the index numbers) in the tmpfile
@@ -28,7 +22,7 @@ function get-wm {
         case $wm in
             0 ) 
                 echo -e $grn'\ninstall tools'$rst
-                sudo apt-get install git libx11-dev libxft-dev libxinerama-dev libxrandr-dev libimlib2-dev bison
+                sudo apt-get install libx11-dev libxft-dev libxinerama-dev libxrandr-dev libimlib2-dev bison
                 ;;
             1 )
                 echo -e $grn'\ngit clone cwm'$rst

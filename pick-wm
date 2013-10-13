@@ -11,16 +11,16 @@
 # also see http://linuxbbq.org/bbs/viewtopic.php?f=19&t=447
 
 # the list of window managers can be read from a file, one line at a time
-#alist=(`cat wmlist`)
+#alist=($(cat wmlist))
 
 # or set here inside the script. either way the last entry should always be "random"
 alist=( ratpoison cwm twm sithwm fluxbox openbox blackbox ctwm alopex monsterwm random )
 
 let num=${#alist[*]}-1     # number of items in the array (minus one to account for zero index)
-tmpfile=`mktemp`            # make a temp file for dialog return value
+tmpfile=$(mktemp)            # make a temp file for dialog return value
 
 # make a list in menu format, with a number first, then the name
-for i in `seq 0 $num`; do
+for i in $(seq 0 $num); do
     blist[i]=`echo $i ${alist[i]}`
 done
 
