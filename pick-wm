@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# script lets you choose a wm from a list, or will pick one at random
+# passes the window manager name to .xinitrc, 
+# so expects .xinitrc to have this code as last line:
+#   exec $1
+
+# this script is provided with NO GUARANTEE and NO SUPPORT 
+# if it breaks or does not do what you want, FIX IT YOURSELF
+
+# also see http://linuxbbq.org/bbs/viewtopic.php?f=19&t=447
+
+# the list of window managers can be read from a file, one line at a time
+#alist=(`cat wmlist`)
+
+# or set here inside the script. either way the last entry should always be "random"
+alist=( ratpoison cwm twm sithwm fluxbox openbox blackbox ctwm alopex monsterwm random )
+
+let num=${#alist[*]}-1     # number of items in the array (minus one to account for zero index)
+tmpfile=`mktemp`            # make a temp file for dialog return value
+
+# make a list in menu format, with a number first, then the name
+for i in `seq 0 $num`; do
+    blist[i]=`echo $i ${alist[i]}`
+done
+
+# display the list in a dialog, save the ruturn value (the index number) in the tmpfile
+dialog --no-tags --menu 'choose a window manager' 50 50 10 ${blist[*]} 2>$tmpfile
+chosen=$(<$tmpfile)     # get the index from the tmpfile
+
+if [ $chosen -eq $num ]; then   # last choice is always "random"
+    let RANGE=$num              # set range to zero to number of elements minus one
+    chosen=$RANDOM              # pick a random integer
+    let chosen%=$RANGE          # use modulo operator to make it within range
+fi
+
+rm $tmpfile     # delete the temp file
+
+# index into the WM array to get the name of the WM
+xinit ${alist[$chosen]}
+
