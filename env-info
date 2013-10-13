@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# simple screen information script
+# similar to archey and screenfetch without annoying ASCII graphics
+
+# this script is provided with NO GUARANTEE and NO SUPPORT 
+# if it breaks or does not do what you want it to, FIX IT YOURSELF
+
 # wm array -- add any that need to be recognized
 wms=( herbstluftwm i3 blackbox kwin awesome spectrwm matwm2 wmfs karmen fvwm cwm sithwm ratpoison evilwm xfwm4 openbox fluxbox )
 
